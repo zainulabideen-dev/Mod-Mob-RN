@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "704969323158",
+    "project_id": "merionlinedukan-3816a",
+    "storage_bucket": "merionlinedukan-3816a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704969323158:android:c305ab67b32836f29688b7",
+        "android_client_info": {
+          "package_name": "com.modrn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704969323158-hteq6a50jaaa020t9en03n208bodfo10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.modrn",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "704969323158-bf61lqbceq130klnan1dqo60ippmsqf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmyj7R5_I3hSLwtJSMEQTw0_eMha2oWck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704969323158-bf61lqbceq130klnan1dqo60ippmsqf5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
