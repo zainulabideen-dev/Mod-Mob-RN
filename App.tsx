@@ -1,4 +1,4 @@
-// In App.js in a new project
+// In App.js
 
 import * as React from 'react';
 import 'react-native-gesture-handler';
