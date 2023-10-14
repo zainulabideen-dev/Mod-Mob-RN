@@ -38,6 +38,8 @@ export const SIGN_OUT = 'signOut.php';
 export const CHECK_USER = 'checkUser.php';
 export const GET_CUSTOMERS = 'getShopCustomers.php';
 export const SEARCH_CUSTOMER = 'searchCustomer.php';
+export const ADD_CUSTOMER = 'addCustomer.php';
+export const REMOVE_CUSTOMER = 'removeShopCustomer.php';
 
 export const _getAxiosHeaders = token => {
   const headers = {
