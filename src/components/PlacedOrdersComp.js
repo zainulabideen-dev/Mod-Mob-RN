@@ -6,14 +6,12 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 export default function PlacedOrdersComp({
   metaStatus,
-  cancleOrder,
   item,
   isCustomer,
   showDetails,
-  updateStatus,
+  metaData,
 }) {
   const [showUpdate, setShowUpdate] = useState(false);
-
   return (
     <View
       style={{
@@ -59,51 +57,36 @@ export default function PlacedOrdersComp({
           paddingVertical: 10,
           borderBottomEndRadius: 7,
           borderBottomStartRadius: 7,
+          justifyContent: 'flex-end',
         }}>
         <View
           style={{
-            flex: 0.4,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          {!isCustomer ? (
-            <TouchableOpacity onPress={() => setShowUpdate(!showUpdate)}>
-              <View
-                style={{
-                  borderColor: '#3498DB',
-                  borderWidth: 1,
-                  marginRight: 5,
-                  paddingHorizontal: 15,
-                  borderRadius: 17,
-                  paddingVertical: 5,
-                  alignItems: 'center',
-                  backgroundColor: '#3498DB',
-                }}>
-                <Text
-                  style={{
-                    color: 'white',
-                    textAlign: 'center',
-                  }}>
-                  Update Status
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ) : null}
-        </View>
-        <View
-          style={{
-            flex: 0.3,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <TouchableOpacity onPress={() => showDetails(item)}>
+          <TouchableOpacity
+            onPress={() => {
+              let actions = ['Details'];
+              if (item?.orderStatus === 'Pending') {
+                actions.push('Cancel');
+              }
+              actions.push(
+                `Change Status to ${
+                  metaData?.sellsOrderStatus[
+                    metaData?.sellsOrderStatus.indexOf(item?.orderStatus) + 1
+                  ]
+                }`,
+              );
+              console.log(actions);
+              showDetails(item, actions);
+            }}>
             <View
               style={{
                 borderColor: '#3498DB',
                 borderWidth: 1,
                 marginRight: 5,
-                paddingHorizontal: 15,
+                paddingHorizontal: 25,
                 borderRadius: 17,
                 paddingVertical: 5,
                 alignItems: 'center',
@@ -114,76 +97,12 @@ export default function PlacedOrdersComp({
                   color: 'white',
                   textAlign: 'center',
                 }}>
-                Details
+                More
               </Text>
             </View>
           </TouchableOpacity>
         </View>
-        <View style={{flex: 0.3, alignItems: 'flex-end'}}>
-          {item?.orderStatus === 'Pending' ? (
-            <TouchableOpacity onPress={() => cancleOrder(item)}>
-              <View
-                style={{
-                  borderColor: '#E74C3C',
-                  borderWidth: 1,
-                  marginRight: 5,
-                  paddingHorizontal: 15,
-                  borderRadius: 17,
-                  paddingVertical: 5,
-                  alignItems: 'center',
-                  backgroundColor: '#E74C3C',
-                }}>
-                <Text
-                  style={{
-                    color: 'white',
-                    textAlign: 'center',
-                  }}>
-                  Cancel
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ) : null}
-        </View>
       </View>
-      {showUpdate ? (
-        <View
-          style={{
-            borderTopColor: '#CCD1D1',
-            borderTopWidth: 1,
-            paddingHorizontal: 15,
-            paddingVertical: 10,
-          }}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {metaStatus.map((ordStatus, _i) => {
-              return (
-                <TouchableOpacity
-                  key={_i}
-                  onPress={() => updateStatus(item, ordStatus)}>
-                  <View
-                    style={{
-                      borderColor: '#28B463',
-                      borderWidth: 1,
-                      marginRight: 5,
-                      paddingHorizontal: 15,
-                      borderRadius: 17,
-                      paddingVertical: 5,
-                      alignItems: 'center',
-                      backgroundColor: '#28B463',
-                    }}>
-                    <Text
-                      style={{
-                        color: 'white',
-                        textAlign: 'center',
-                      }}>
-                      {ordStatus}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
-      ) : null}
     </View>
   );
 }

@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {Modal, StatusBar, Text, View} from 'react-native';
-import {ColorPicker} from 'react-native-color-picker';
+import {ColorPicker, fromHsv} from 'react-native-color-picker';
 import ButtonCompReact from '../components/ButtomCompReact';
 import {COLORS} from '../config/colors';
+import Slider from '@react-native-community/slider';
 
 export const ColorPickerModal = ({visible, onCofirm, onClose}) => {
   const [color, setColor] = useState();
@@ -29,7 +30,9 @@ export const ColorPickerModal = ({visible, onCofirm, onClose}) => {
           Click on round circle to select your colour
         </Text>
         <ColorPicker
-          onColorSelected={color => setColor(color)}
+          sliderComponent={Slider}
+          onColorChange={color => setColor(fromHsv(color))}
+          //onColorSelected={color => setColor(color)}
           style={{flex: 1}}
         />
         {color !== undefined ? (

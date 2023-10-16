@@ -32,12 +32,13 @@ export default function CreateProductScreen({navigation, route}) {
   const [showProductColorPicker, setShowProductColorPicker] = useState(false);
 
   useEffect(() => {
+    console.log(item);
     if (item !== undefined) {
       setName(item.name);
       setAmmount(parseInt(item.ammount));
       setUnit(item.unit);
       setPrice(parseInt(item.price));
-      setItemPrice(parseInt(item.price) / parseInt(item.ammount));
+      setItemPrice(parseInt(item.price));
 
       setProductSize(item.size.split(','));
       if (item.colors !== '') {
@@ -108,7 +109,7 @@ export default function CreateProductScreen({navigation, route}) {
     formData.append('ammount', ammount);
     formData.append('unit', unit);
     formData.append('price', price);
-    formData.append('inStock', 'Yes');
+    //formData.append('inStock', 'Yes');
     formData.append('size', productSize, toString());
     formData.append('colors', productColors.toString());
     formData.append('platform', 'mob');
@@ -184,7 +185,7 @@ export default function CreateProductScreen({navigation, route}) {
         onCloseModal={() => setShowSearchSelection(false)}
       />
       <HeaderComp
-        title={'Add New Product'}
+        title={item === undefined ? 'Add New Product' : 'Update Product'}
         navigation={navigation}
         backPress={true}
         userLoggedIn={userLoggedIn}
@@ -228,25 +229,21 @@ export default function CreateProductScreen({navigation, route}) {
             hint={'Product Name'}
           />
           <InputTextComp
-            value={ammount.toString()}
-            keyboardType={'number-pad'}
-            placeholder={'Amount'}
-            onChangeText={text => {
-              if (isNaN(parseInt(text))) {
-                setAmmount(0);
-              } else {
-                setAmmount(text);
-              }
-            }}
-            hint={'amount'}
-          />
-          <InputTextComp
             value={unit}
             placeholder={'Unit'}
             onChangeText={text => {
               setUnit(text);
             }}
-            hint={'unit'}
+            hint={'Like KG, Mg, Litter, Piece etc (optional)'}
+          />
+          <InputTextComp
+            value={ammount.toString()}
+            keyboardType={'number-pad'}
+            placeholder={'Stock'}
+            onChangeText={text => {
+              setAmmount(text);
+            }}
+            hint={'Stock'}
           />
           <InputTextComp
             value={itemPrice.toString()}
@@ -260,7 +257,7 @@ export default function CreateProductScreen({navigation, route}) {
                 setPrice(0);
               }
             }}
-            hint={'price'}
+            hint={'Price (as per 1 unit)'}
           />
 
           <Text

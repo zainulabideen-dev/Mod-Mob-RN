@@ -18,6 +18,7 @@ import {
 } from '../../../config/constants';
 import DatePicker from 'react-native-date-picker';
 import PlaceOrderFilterComp from '../../../components/PlaceOrderFilterComp';
+import MoreOptionsComp from '../../../components/MoreOptionsComp';
 
 export default function PlaceOrdersScreen({navigation, route}) {
   const {isCustomer, shop, userLoggedIn, metaData} = route.params;
@@ -31,6 +32,9 @@ export default function PlaceOrdersScreen({navigation, route}) {
     metaData?.sellsOrderStatus[0],
   );
   const [filterDate, setFilterDate] = useState('Select Date');
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState();
+  const [actions, setActions] = useState([]);
 
   useEffect(() => {
     _getPlacedOrders(currentStatus, filterDate);
@@ -140,6 +144,39 @@ export default function PlaceOrdersScreen({navigation, route}) {
         userLoggedIn={userLoggedIn}
         backPress={true}
       />
+      {showMoreOptions ? (
+        <MoreOptionsComp
+          list={actions}
+          showHide={bol => setShowMoreOptions(bol)}
+          onPress={item => {
+            if (item.toLowerCase().includes('change status')) {
+              let changeTo =
+                metaData?.sellsOrderStatus[
+                  metaData?.sellsOrderStatus.indexOf(
+                    currentOrder?.orderStatus,
+                  ) + 1
+                ];
+              setShowMoreOptions(false);
+              _updateStatus(currentOrder, changeTo);
+            } else if (item === 'Details') {
+              setShowMoreOptions(false);
+              navigation.navigate('PlaceOrderDetailScreen', {
+                order: currentOrder,
+                shop,
+                user,
+                item,
+                userLoggedIn,
+                metaData,
+                isCustomer,
+              });
+            } else if (item === 'Cancel') {
+              setShowMoreOptions(false);
+              _updateStatus(currentOrder, 'Cancel');
+            }
+          }}
+        />
+      ) : null}
+
       <AppLoaderComp visible={showLoader} />
       {showFilter ? (
         <PlaceOrderFilterComp
@@ -192,20 +229,13 @@ export default function PlaceOrdersScreen({navigation, route}) {
                 item={item}
                 isCustomer={isCustomer}
                 keyExtractor={item => item.id}
-                updateStatus={(item, status) => _updateStatus(item, status)}
                 metaStatus={metaData?.sellsOrderStatus}
-                cancleOrder={item => _updateStatus(item, 'Cancel')}
-                showDetails={order =>
-                  navigation.navigate('PlaceOrderDetailScreen', {
-                    order,
-                    shop,
-                    user,
-                    item,
-                    userLoggedIn,
-                    metaData,
-                    isCustomer,
-                  })
-                }
+                metaData={metaData}
+                showDetails={(order, actions) => {
+                  setCurrentOrder(order);
+                  setActions(actions);
+                  setShowMoreOptions(true);
+                }}
               />
             )}
           />

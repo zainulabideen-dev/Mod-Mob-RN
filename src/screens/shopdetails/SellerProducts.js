@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ProductComp from '../../components/ProductComp';
 import SearchComp from '../../components/SearchComp';
@@ -19,8 +13,8 @@ import {toastShow} from '../../config/toastmessage';
 import {AppLoaderComp} from '../../components/AppLoaderComp';
 import ButtonCompReact from '../../components/ButtomCompReact';
 import HeaderComp from '../../components/HeaderComp';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {ShowFullImageModal} from '../../modals/ShowFullImageModal';
+import MoreOptionsComp from '../../components/MoreOptionsComp';
 
 export default function SellerProductsScreen({navigation, route}) {
   const {userLoggedIn, shop, isCustomer, metaData} = route.params;
@@ -155,6 +149,25 @@ export default function SellerProductsScreen({navigation, route}) {
         />
       ) : null}
       {showMoreOptions ? (
+        <MoreOptionsComp
+          list={['Update', 'Delete']}
+          showHide={bol => setShowMoreOptions(bol)}
+          onPress={item => {
+            if (item === 'Update') {
+              setShowMoreOptions(false);
+              navigation.navigate('CreateProductScreen', {
+                userLoggedIn,
+                metaData,
+                item: currectProduct,
+              });
+            } else if (item === 'Delete') {
+              setShowMoreOptions(false);
+              _deleteProduct(currectProduct);
+            }
+          }}
+        />
+      ) : null}
+      {/* {showMoreOptions ? (
         <View
           style={{
             position: 'absolute',
@@ -229,7 +242,7 @@ export default function SellerProductsScreen({navigation, route}) {
             </TouchableOpacity>
           </View>
         </View>
-      ) : null}
+      ) : null} */}
       {!isCustomer ? (
         <HeaderComp
           backPress={true}
