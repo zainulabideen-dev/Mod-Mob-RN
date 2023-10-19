@@ -15,6 +15,7 @@ import ButtonCompReact from '../../components/ButtomCompReact';
 import HeaderComp from '../../components/HeaderComp';
 import {ShowFullImageModal} from '../../modals/ShowFullImageModal';
 import MoreOptionsComp from '../../components/MoreOptionsComp';
+import AddToCardComp from '../../components/AddToCardComp';
 
 export default function SellerProductsScreen({navigation, route}) {
   const {userLoggedIn, shop, isCustomer, metaData} = route.params;
@@ -27,6 +28,7 @@ export default function SellerProductsScreen({navigation, route}) {
   const [showFullImage, setShowFullImage] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
   const [currectProduct, setCurrectProduct] = useState([]);
+  const [showAddToCart, setShowAddToCart] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -167,82 +169,19 @@ export default function SellerProductsScreen({navigation, route}) {
           }}
         />
       ) : null}
-      {/* {showMoreOptions ? (
-        <View
-          style={{
-            position: 'absolute',
-            zIndex: 2,
-            backgroundColor: 'white',
-            bottom: 0,
-            width: '100%',
-            padding: 20,
-            borderTopWidth: 1,
-            borderTopColor: '#D5DBDB',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text
-              style={{
-                color: 'black',
-                fontSize: 17,
-                color: 'black',
-                fontFamily: 'Poppins-Regular',
-              }}>
-              More Options
-            </Text>
-            <TouchableWithoutFeedback onPress={() => setShowMoreOptions(false)}>
-              <AntDesign name="close" size={20} color={'black'} />
-            </TouchableWithoutFeedback>
-          </View>
-
-          <View
-            style={{
-              marginTop: 15,
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setShowMoreOptions(false);
-                navigation.navigate('CreateProductScreen', {
-                  userLoggedIn,
-                  metaData,
-                  item: currectProduct,
-                });
-              }}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 17,
-                  color: 'black',
-                  fontFamily: 'Poppins-Regular',
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#D5DBDB',
-                  paddingBottom: 5,
-                }}>
-                Update
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setShowMoreOptions(false);
-                _deleteProduct(currectProduct);
-              }}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 17,
-                  marginTop: 10,
-                  color: 'black',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                Delete
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : null} */}
+      {showAddToCart ? (
+        <AddToCardComp
+          product={currectProduct}
+          addedItems={addedItems}
+          addToCart={item => {
+            setShowAddToCart(false);
+            toastShow('success', 'Added to Cart');
+            setAddedItems([...addedItems, item]);
+          }}
+          shop={shop}
+          showHide={bol => setShowAddToCart(bol)}
+        />
+      ) : null}
       {!isCustomer ? (
         <HeaderComp
           backPress={true}
@@ -274,6 +213,8 @@ export default function SellerProductsScreen({navigation, route}) {
             data={filterProductsList}
             renderItem={({item}) => (
               <ProductComp
+                shop={shop}
+                item={item}
                 isCustomer={isCustomer}
                 metaData={metaData}
                 openImage={item => {
@@ -284,10 +225,12 @@ export default function SellerProductsScreen({navigation, route}) {
                   setShowMoreOptions(true);
                   setCurrectProduct(item);
                 }}
-                shop={shop}
-                item={item}
                 navigation={navigation}
                 addProduct={item => _addProduct(item)}
+                addToCart={item => {
+                  setShowAddToCart(true);
+                  setCurrectProduct(item);
+                }}
               />
             )}
             keyExtractor={item => item.id}
@@ -300,7 +243,8 @@ export default function SellerProductsScreen({navigation, route}) {
             onPress={() => {
               if (isCustomer) {
                 if (addedItems.length > 0) {
-                  navigation.navigate('SelectedItemsScreen', {
+                  //console.log(addedItems);
+                  navigation.replace('SelectedItemsScreen', {
                     itemsList: addedItems,
                     userLoggedIn,
                     shop,

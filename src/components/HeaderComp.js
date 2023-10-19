@@ -4,7 +4,6 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   Image,
-  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';

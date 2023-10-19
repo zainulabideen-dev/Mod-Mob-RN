@@ -35,12 +35,8 @@ export default function PlaceOrderScreen({navigation, route}) {
   }, []);
 
   useEffect(() => {
-    if (bolPFS) {
-      setPrice(parseInt(totalPrice));
-    } else {
-      setPrice(parseInt(totalPrice) + parseInt(calcDeliveryCharges));
-    }
-  }, [bolPFS]);
+    setPrice(parseInt(totalPrice));
+  }, []);
 
   async function _deliveryAreaApi(json, type = 'get') {
     let params = {};
@@ -194,7 +190,7 @@ export default function PlaceOrderScreen({navigation, route}) {
           </View>
         </View>
 
-        <View style={{marginTop: 15}}>
+        <View>
           <InfoTextComp
             heading={'Total Price'}
             subHeading={`${_numberWithCommas(price)} ${shop.currency}`}
@@ -290,7 +286,9 @@ export default function PlaceOrderScreen({navigation, route}) {
             fontFamily: 'Poppins-Bold',
             fontSize: 20,
           }}>
-          {`${_numberWithCommas(price)} ${shop.currency}`}
+          {`${_numberWithCommas(
+            bolPFS ? price : price + parseInt(calcDeliveryCharges),
+          )} ${shop.currency}`}
         </Text>
 
         <ButtonCompReact

@@ -1,17 +1,15 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {COLORS} from '../config/colors';
 import {_numberWithCommas} from '../config/constants';
-import {ScrollView} from 'react-native-gesture-handler';
 
 export default function PlacedOrdersComp({
-  metaStatus,
   item,
-  isCustomer,
   showDetails,
   metaData,
+  isCustomer,
 }) {
-  const [showUpdate, setShowUpdate] = useState(false);
+  console.log(item);
   return (
     <View
       style={{
@@ -44,7 +42,10 @@ export default function PlacedOrdersComp({
 
           <Text style={{color: 'black'}}>Total Items: {item.totalItems}</Text>
           <Text style={{color: 'black'}}>
-            Total Price: {_numberWithCommas(item.totalPrice)}{' '}
+            Total Price:{' '}
+            {_numberWithCommas(
+              parseInt(item.totalPrice) + parseInt(item.dlvCharges),
+            )}{' '}
             {`${item?.currency}`}
           </Text>
         </View>
@@ -71,14 +72,17 @@ export default function PlacedOrdersComp({
               if (item?.orderStatus === 'Pending') {
                 actions.push('Cancel');
               }
-              actions.push(
-                `Change Status to ${
-                  metaData?.sellsOrderStatus[
-                    metaData?.sellsOrderStatus.indexOf(item?.orderStatus) + 1
-                  ]
-                }`,
-              );
-              console.log(actions);
+
+              if (!isCustomer) {
+                actions.push(
+                  `Change Status to ${
+                    metaData?.sellsOrderStatus[
+                      metaData?.sellsOrderStatus.indexOf(item?.orderStatus) + 1
+                    ]
+                  }`,
+                );
+              }
+
               showDetails(item, actions);
             }}>
             <View

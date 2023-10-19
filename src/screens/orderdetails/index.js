@@ -28,6 +28,8 @@ export default function PlaceOrderDetailScreen({navigation, route}) {
   const [showLocation, setShowLocation] = useState(false);
   const [placeOrderList, setPlaceOrderList] = useState([]);
 
+  console.log(order, 'order=?');
+
   useEffect(() => {
     _getOrderDetail();
   }, []);
@@ -182,7 +184,7 @@ export default function PlaceOrderDetailScreen({navigation, route}) {
                 color: 'black',
                 fontFamily: 'Poppins-Regular',
               }}>
-              {item.orderDate}
+              {order?.orderDate}
             </Text>
           </View>
           <View style={{flex: 0.5, alignItems: 'flex-end'}}>
@@ -295,6 +297,30 @@ export default function PlaceOrderDetailScreen({navigation, route}) {
                   </Text>
                 </View>
               </View>
+              <View
+                style={{
+                  paddingBottom: 5,
+                  borderBottomColor: '#CCD1D1',
+                  borderBottomWidth: 1,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    color: 'black',
+                    fontFamily: 'Poppins-Medium',
+                    marginTop: 15,
+                  }}>
+                  Shop Name
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontFamily: 'Poppins-Regular',
+                  }}>
+                  {order?.shopName}
+                </Text>
+              </View>
+
               {order?.pickFromShop === '0' ? (
                 <>
                   <Text

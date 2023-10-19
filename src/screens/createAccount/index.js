@@ -1,4 +1,10 @@
-import {View, Text, Image, StatusBar} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StatusBar,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import React, {useState} from 'react';
 import {COLORS} from '../../config/colors';
 import {_signInWithGoogle} from '../../config/firebase';
@@ -8,13 +14,10 @@ import {_storeIntoAsyncStorage} from '../../config/asyncstorage';
 import ButtonCompReact from '../../components/ButtomCompReact';
 import messaging from '@react-native-firebase/messaging';
 import {toastShow} from '../../config/toastmessage';
-import {asyncStorageKeys} from '../../config/constants';
-import {useDispatch} from 'react-redux';
-import {setLoggedInUser} from '../../config/store/reducers/appReducer';
 import InputTextComp from '../../components/InputTextComp';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function CreateAccountScreen({navigation}) {
-  const dispatch = useDispatch();
   const [showLoader, setShowLoader] = useState(false);
 
   const [gmailId, setGmailId] = useState('');
@@ -57,6 +60,12 @@ export default function CreateAccountScreen({navigation}) {
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <StatusBar backgroundColor={'#2C3E50'} />
       <AppLoaderComp visible={showLoader} />
+      <View style={{padding: 10}}>
+        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <AntDesign name={'left'} size={25} color={'black'} />
+        </TouchableWithoutFeedback>
+      </View>
+
       <View style={{flex: 0.3}}>
         <Image
           style={{

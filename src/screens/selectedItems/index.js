@@ -92,7 +92,7 @@ export default function SelectedItemsScreen({navigation, route}) {
 
   function _continue() {
     if (addedItems.length === 0) {
-      toastShow('Please select at least 1 product');
+      toastShow('error', 'Please select at least 1 product');
       return;
     }
 
@@ -103,9 +103,6 @@ export default function SelectedItemsScreen({navigation, route}) {
       let pClr = product?.colors.split(',');
       let eClr = element?.colors.split(',');
 
-      // console.log(`===${element?.name} COLOR===`);
-      // console.log(pClr, eClr);
-
       if (pClr.toString() !== '' && eClr.toString() === '') {
         stopElement = element;
         msg = `please select ${element?.name} color`;
@@ -113,9 +110,6 @@ export default function SelectedItemsScreen({navigation, route}) {
 
       let pSize = product?.size.split(',');
       let eSize = element?.size.split(',');
-
-      // console.log(`===${element?.name} SIZE===`);
-      // console.log(pSize, eSize);
 
       if (pSize.toString() !== '' && eSize.toString() === '') {
         stopElement = element;
@@ -157,7 +151,7 @@ export default function SelectedItemsScreen({navigation, route}) {
             {`Total Price = ${_numberWithCommas(totalPrice)} ${shop.currency}`}
           </Text>
           <Text style={{color: 'black', fontFamily: 'Poppins-Regular'}}>
-            {`Total Items = ${itemsList.length}`}
+            {`Total Items = ${addedItems.length}`}
           </Text>
         </View>
         <View style={{marginTop: 10, flex: 0.9}}>
@@ -176,14 +170,14 @@ export default function SelectedItemsScreen({navigation, route}) {
                   _setColorSizes(addedItems, val, item, type);
                 }}
                 removeItem={item => {
-                  let list = addedItems.filter(adt => adt.id !== item.id);
-                  console.log(list.length, addedItems.length);
+                  let list = addedItems.filter(adt => adt.rowId !== item.rowId);
+                  console.log(list);
                   setAddedItems(list);
                   setFilterProductsList(list);
                 }}
               />
             )}
-            keyExtractor={item => item.id}
+            keyExtractor={(item, index) => index}
           />
         </View>
         <View style={{flex: 0.1, justifyContent: 'flex-end'}}>

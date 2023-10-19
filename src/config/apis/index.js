@@ -40,6 +40,8 @@ export const GET_CUSTOMERS = 'getShopCustomers.php';
 export const SEARCH_CUSTOMER = 'searchCustomer.php';
 export const ADD_CUSTOMER = 'addCustomer.php';
 export const REMOVE_CUSTOMER = 'removeShopCustomer.php';
+export const SEND_CODE = 'sendVerificationEmail.php';
+export const VERFIY_CODE = 'recoverPassword.php';
 
 export const _getAxiosHeaders = token => {
   const headers = {

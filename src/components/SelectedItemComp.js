@@ -1,29 +1,15 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {_numberWithCommas} from '../config/constants';
 
 export default function SelectedItemComp({
   item,
   shop,
-  onChangeAmount,
   productsList,
-  onColorSizeSelected,
   removeItem,
 }) {
   let product = productsList.filter(prd => prd.id === item.id)[0];
   let price = isNaN(parseInt(item.price)) ? 0 : parseInt(item.price);
-  let colors = product.colors === '' ? [] : product.colors.split(',');
-  let sizes = product.size === '' ? [] : product.size.split(',');
-  let chooseColors = item.colors === '' ? [] : item.colors.split(',');
-  let chooseSizes = item.size === '' ? [] : item.size.split(',');
 
   return (
     <View style={styles.customerProductStyle}>
@@ -99,14 +85,11 @@ export default function SelectedItemComp({
           }}>
           <Text
             style={{
-              fontSize: 14,
+              fontSize: 17,
               color: 'black',
-              textAlign: 'right',
-              fontFamily: 'Poppins-Regular',
+              fontFamily: 'Poppins-Bold',
             }}>
-            {`InStock: ${item.stockLeft} ${
-              item.unit === '' ? 'items' : item.unit
-            }`}
+            {item.name}
           </Text>
           <Text
             style={{
@@ -114,23 +97,8 @@ export default function SelectedItemComp({
               color: 'black',
               fontFamily: 'Poppins-Regular',
             }}>
-            {item.name}
+            {`Quantity: ${item?.ammount.toString()}`}
           </Text>
-          <View
-            style={{
-              borderColor: 'black',
-              borderWidth: 1,
-              height: 40,
-            }}>
-            <TextInput
-              onChangeText={text => {
-                onChangeAmount(text);
-              }}
-              keyboardType="number-pad"
-              style={{textAlign: 'center'}}
-              value={item?.ammount.toString()}
-            />
-          </View>
           <Text
             style={{
               fontSize: 15,
@@ -140,120 +108,78 @@ export default function SelectedItemComp({
             }}>
             {`Calc Price: ${_numberWithCommas(price)} ${shop.currency}`}
           </Text>
-          {colors.length > 0 ? (
-            <View style={{marginTop: 5}}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  color: 'black',
-                  fontFamily: 'Poppins-Regular',
-                  marginTop: 2,
-                }}>
-                {`Choose Colors`}
-              </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            {item?.colors !== '' ? (
               <View
                 style={{
-                  flexDirection: 'row',
+                  flex: 0.5,
                 }}>
-                {colors.map((clr, i) => {
-                  let bol = false;
-                  if (chooseColors.includes(clr)) {
-                    bol = true;
-                  }
-                  return (
-                    <TouchableOpacity
-                      key={i}
-                      onPress={() => {
-                        if (bol) {
-                          let list = chooseColors.filter(
-                            chClr => chClr !== clr,
-                          );
-                          onColorSizeSelected(list, 'C');
-                        } else {
-                          onColorSizeSelected([...chooseColors, clr], 'C');
-                        }
-                      }}>
-                      <View
-                        style={{
-                          width: 30,
-                          height: 30,
-                          backgroundColor: clr,
-                          marginRight: 5,
-                          borderRadius: 5,
-                          borderColor: 'black',
-                          borderWidth: 1,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        {bol ? (
-                          <AntDesign name="check" color="white" size={15} />
-                        ) : null}
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: 'black',
+                    fontFamily: 'Poppins-Regular',
+                    marginTop: 2,
+                  }}>
+                  {`Color`}
+                </Text>
+                <View
+                  style={{
+                    width: 30,
+                    height: 30,
+                    backgroundColor: item?.colors,
+                    marginRight: 5,
+                    borderRadius: 5,
+                    borderColor: 'black',
+                    borderWidth: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}></View>
               </View>
-            </View>
-          ) : null}
-          {sizes.length > 0 ? (
-            <View style={{marginTop: 5}}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  color: 'black',
-                  fontFamily: 'Poppins-Regular',
-                  marginTop: 2,
-                }}>
-                {`Choose Size`}
-              </Text>
+            ) : null}
+
+            {item?.size !== '' ? (
               <View
                 style={{
-                  flexDirection: 'row',
+                  flex: 0.5,
                 }}>
-                {sizes.map((szs, i) => {
-                  let bol = false;
-                  if (chooseSizes.includes(szs)) {
-                    bol = true;
-                  }
-                  return (
-                    <TouchableOpacity
-                      key={i}
-                      onPress={() => {
-                        if (bol) {
-                          let list = chooseSizes.filter(size => size !== szs);
-                          onColorSizeSelected(list, 'S');
-                        } else {
-                          onColorSizeSelected([...chooseSizes, szs], 'S');
-                        }
-                      }}>
-                      <View
-                        style={{
-                          width: 30,
-                          height: 30,
-                          backgroundColor: bol ? 'green' : 'white',
-                          marginRight: 5,
-                          borderRadius: 5,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderColor: 'black',
-                          borderWidth: 1,
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: 15,
-                            color: bol ? 'white' : 'black',
-                            fontFamily: 'Poppins-Regular',
-                            includeFontPadding: false,
-                          }}>
-                          {szs}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: 'black',
+                    fontFamily: 'Poppins-Regular',
+                    marginTop: 2,
+                  }}>
+                  {`Size`}
+                </Text>
+                <View
+                  style={{
+                    width: 30,
+                    height: 30,
+                    backgroundColor: 'green',
+                    marginRight: 5,
+                    borderRadius: 5,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderColor: 'black',
+                    borderWidth: 1,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'white',
+                      fontFamily: 'Poppins-Regular',
+                      includeFontPadding: false,
+                    }}>
+                    {item?.size}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ) : null}
+            ) : null}
+          </View>
         </View>
       </View>
     </View>

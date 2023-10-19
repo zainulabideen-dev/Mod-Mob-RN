@@ -12,10 +12,14 @@ import {asyncStorageKeys} from '../../config/constants';
 import {useDispatch} from 'react-redux';
 import {setLoggedInUser} from '../../config/store/reducers/appReducer';
 import InputTextComp from '../../components/InputTextComp';
+import {ForgotPassowrdModal} from '../../modals/ForgotPassowrdModal';
+import {RecoverPassowrdModal} from '../../modals/RecoverPassowrdModal';
 
 export default function SignInScreen({navigation}) {
   const dispatch = useDispatch();
   const [showLoader, setShowLoader] = useState(false);
+  const [showForgotPassModal, setShowForgotPassModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
 
   const [gmailId, setGmailId] = useState('');
   const [password, setPassword] = useState('');
@@ -73,7 +77,22 @@ export default function SignInScreen({navigation}) {
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <StatusBar backgroundColor={'#2C3E50'} />
       <AppLoaderComp visible={showLoader} />
-      <View style={{flex: 0.4}}>
+      <ForgotPassowrdModal
+        visible={showForgotPassModal}
+        onCloseModal={() => setShowForgotPassModal(false)}
+        success={() => {
+          setShowForgotPassModal(false);
+          setSuccessModal(true);
+        }}
+      />
+      <RecoverPassowrdModal
+        visible={successModal}
+        onCloseModal={() => setSuccessModal(false)}
+        success={() => {
+          setSuccessModal(false);
+        }}
+      />
+      <View style={{flex: 0.3}}>
         <Image
           style={{
             width: '100%',
@@ -83,7 +102,7 @@ export default function SignInScreen({navigation}) {
           source={require('../../assets/logo.png')}
         />
       </View>
-      <View style={{flex: 0.6, paddingHorizontal: 20}}>
+      <View style={{flex: 0.7, paddingHorizontal: 20}}>
         <Text
           style={{
             fontSize: 20,
@@ -134,6 +153,15 @@ export default function SignInScreen({navigation}) {
               navigation.navigate('CreateAccountScreen');
             }}
           />
+          <View style={{marginTop: 5}}>
+            <ButtonCompReact
+              label={'Forgot Passowrd?'}
+              bgColor={'#E74C3C'}
+              onPress={() => {
+                setShowForgotPassModal(true);
+              }}
+            />
+          </View>
         </View>
       </View>
     </View>

@@ -8,21 +8,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {COLORS} from '../config/colors';
-import CheckBoxComp from './CheckBoxComp';
 import {_numberWithCommas} from '../config/constants';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 export default function ProductComp({
   item,
   shop,
-  addProduct,
   isCustomer,
   moreOptions,
   openImage,
+  addToCart,
 }) {
   let colorList = item?.colors !== '' ? item?.colors.split(',') : [];
-  let sizeList = item?.size !== '' ? item?.size.split(',') : [];
-  const [checked, setChecked] = useState(false);
 
   return (
     <View
@@ -37,8 +34,8 @@ export default function ProductComp({
           <TouchableWithoutFeedback onPress={() => openImage(item)}>
             <Image
               style={{
-                height: 90,
-                width: '100%',
+                height: 50,
+                width: 50,
               }}
               resizeMode="contain"
               borderRadius={5}
@@ -46,7 +43,7 @@ export default function ProductComp({
             />
           </TouchableWithoutFeedback>
         </View>
-        <View style={{paddingLeft: 10, flex: 0.5}}>
+        <View style={{paddingLeft: 10, flex: 0.7}}>
           <Text
             style={{
               fontSize: 17,
@@ -64,73 +61,78 @@ export default function ProductComp({
               item.unit === '' ? 'item' : item.unit
             } = ${_numberWithCommas(item.price)} ${shop.currency}`}
           </Text>
+          {isCustomer ? (
+            <TouchableOpacity
+              onPress={() => addToCart(item)}
+              style={{
+                marginVertical: 10,
+              }}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  backgroundColor: '#17A589',
+                  padding: 10,
+                  color: 'white',
+                  borderRadius: 5,
+                }}>
+                Add To Cart
+              </Text>
+            </TouchableOpacity>
+          ) : null}
           {!isCustomer ? (
-            <>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: 3,
-                }}>
-                {sizeList.map((item, i) => {
-                  return (
-                    <TouchableOpacity
-                      key={i}
-                      onPress={() => {
-                        console.log('test');
-                      }}>
-                      <View
-                        style={{
-                          alignItems: 'center',
-                          borderWidth: 1,
-                          borderColor: COLORS.gray_100,
-                          borderRadius: 5,
-                          width: 30,
-                          height: 30,
-                          justifyContent: 'center',
-
-                          marginRight: 5,
-                          backgroundColor: '#5DADE2',
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 0.5}}>
+                {item?.size !== '' ? (
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: 17,
+                    }}>
+                    {`Size: ${item?.size}`}
+                  </Text>
+                ) : null}
+              </View>
+              <View style={{flex: 0.5, justifyContent: 'flex-end'}}>
+                {colorList.length > 0 ? (
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: 17,
+                    }}>
+                    Color
+                  </Text>
+                ) : null}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 3,
+                  }}>
+                  {colorList.map((item, i) => {
+                    return (
+                      <TouchableOpacity
+                        key={i}
+                        onPress={() => {
+                          console.log('test');
                         }}>
-                        <Text
+                        <View
                           style={{
-                            color: 'white',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          {item}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
+                            alignItems: 'center',
+                            borderWidth: 1,
+                            borderColor: COLORS.gray_100,
+                            borderRadius: 5,
+                            width: 30,
+                            height: 30,
+                            marginRight: 5,
+                            backgroundColor: item,
+                          }}></View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: 3,
-                }}>
-                {colorList.map((item, i) => {
-                  return (
-                    <TouchableOpacity
-                      key={i}
-                      onPress={() => {
-                        console.log('test');
-                      }}>
-                      <View
-                        style={{
-                          alignItems: 'center',
-                          borderWidth: 1,
-                          borderColor: COLORS.gray_100,
-                          borderRadius: 5,
-                          width: 30,
-                          height: 30,
-                          marginRight: 5,
-                          backgroundColor: item,
-                        }}></View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            </>
+            </View>
           ) : null}
         </View>
 
@@ -145,26 +147,6 @@ export default function ProductComp({
               <TouchableWithoutFeedback onPress={() => moreOptions(item)}>
                 <Entypo name="dots-three-vertical" size={20} color={'black'} />
               </TouchableWithoutFeedback>
-            </View>
-          ) : null}
-          {isCustomer ? (
-            <View style={{alignItems: 'flex-end'}}>
-              <CheckBoxComp
-                isChecked={checked}
-                onPress={() => {
-                  setChecked(!checked);
-                  addProduct({
-                    id: item.id,
-                    name: item.name,
-                    ammount: 1,
-                    price: item.price,
-                    colors: '',
-                    size: '',
-                    unit: item.unit,
-                    stockLeft: parseInt(item.remainStock) - 1,
-                  });
-                }}
-              />
             </View>
           ) : null}
         </View>

@@ -35,7 +35,7 @@ export default function CreateProductScreen({navigation, route}) {
     console.log(item);
     if (item !== undefined) {
       setName(item.name);
-      setAmmount(parseInt(item.ammount));
+      setAmmount(parseInt(item.remainStock));
       setUnit(item.unit);
       setPrice(parseInt(item.price));
       setItemPrice(parseInt(item.price));
@@ -109,7 +109,6 @@ export default function CreateProductScreen({navigation, route}) {
     formData.append('ammount', ammount);
     formData.append('unit', unit);
     formData.append('price', price);
-    //formData.append('inStock', 'Yes');
     formData.append('size', productSize, toString());
     formData.append('colors', productColors.toString());
     formData.append('platform', 'mob');
@@ -275,22 +274,12 @@ export default function CreateProductScreen({navigation, route}) {
               marginTop: 3,
             }}>
             {['S', 'M', 'L', 'XL'].map((item, i) => {
-              let bol = false;
-              if (productSize.includes(item)) {
-                bol = true;
-              }
+              let bol = productSize === item ? true : false;
               return (
                 <TouchableOpacity
                   key={i}
                   onPress={() => {
-                    if (productSize.includes(item)) {
-                      let updatedDays = productSize.filter(
-                        each => each !== item,
-                      );
-                      setProductSize(updatedDays);
-                    } else {
-                      setProductSize([...productSize, item]);
-                    }
+                    setProductSize(item);
                   }}>
                   <View
                     style={{

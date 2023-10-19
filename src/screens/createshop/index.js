@@ -111,6 +111,10 @@ export default function CreateOnlineShopScreen({navigation, route}) {
       toastShow('error', 'Please provide shop name');
       return;
     }
+    if (deliveryCharges === undefined) {
+      toastShow('error', 'Please provide delivery charges');
+      return;
+    }
     if (openTime === '--:--') {
       toastShow('error', 'Please provide shop open time');
       return;

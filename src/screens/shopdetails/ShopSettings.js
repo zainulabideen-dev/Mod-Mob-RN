@@ -45,7 +45,7 @@ export default function ShopSettingsScreen({route, navigation}) {
     let params = {
       userId: user.id,
       apiToken: user.token,
-      status: 'false',
+      status: '0',
     };
 
     try {
