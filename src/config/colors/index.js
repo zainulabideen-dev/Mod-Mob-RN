@@ -9,4 +9,5 @@ export const COLORS = {
   green_300: '#48C9B0',
   yellow_100: '#F1C40F',
   red_100: '#EC7063',
+  primary: '#1ABC9C',
 };

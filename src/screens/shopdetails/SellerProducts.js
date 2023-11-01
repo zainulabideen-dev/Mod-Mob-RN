@@ -16,6 +16,7 @@ import HeaderComp from '../../components/HeaderComp';
 import {ShowFullImageModal} from '../../modals/ShowFullImageModal';
 import MoreOptionsComp from '../../components/MoreOptionsComp';
 import AddToCardComp from '../../components/AddToCardComp';
+import {_constCheckOutOfStock} from '../../config/constants';
 
 export default function SellerProductsScreen({navigation, route}) {
   const {userLoggedIn, shop, isCustomer, metaData} = route.params;
@@ -29,6 +30,7 @@ export default function SellerProductsScreen({navigation, route}) {
   const [addedItems, setAddedItems] = useState([]);
   const [currectProduct, setCurrectProduct] = useState([]);
   const [showAddToCart, setShowAddToCart] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -70,21 +72,70 @@ export default function SellerProductsScreen({navigation, route}) {
   }
 
   function _addProduct(item) {
-    let found = false;
-    let list = [];
-    addedItems.forEach(element => {
-      if (element.id === item.id) {
-        found = true;
-      }
-    });
-
-    if (found) {
-      list = addedItems.filter(prd => prd.id !== item.id);
-      setAddedItems(list);
-    } else {
-      //console.log(item);
-      setAddedItems([...addedItems, item]);
+    if (_constCheckOutOfStock(item, productsList, addedItems)) {
+      toastShow('error', 'out of stock');
+      return;
     }
+    let prdAddedItem = addedItems.filter(prd => prd.id === item.id);
+    let orignalProd = productsList.filter(prd => prd.id === item.id)[0];
+    if (prdAddedItem.length === 0) {
+      let addItem = {
+        id: item?.id,
+        ammount: 1,
+        name: item?.name,
+        photo: item?.photo,
+        price: item?.price,
+        shopId: shop?.id,
+        colors: item?.colors,
+        size: item?.size,
+      };
+      let updatedList = [...addedItems, addItem];
+      setAddedItems(updatedList);
+      _calcTotalPrice(updatedList);
+    } else {
+      let updatedList = [];
+      addedItems.forEach(element => {
+        if (element.id === item.id) {
+          element.ammount = parseInt(element?.ammount) + 1;
+          element.price =
+            parseInt(element?.price) + parseInt(orignalProd?.price);
+        }
+        updatedList.push(element);
+      });
+      setAddedItems(updatedList);
+      _calcTotalPrice(updatedList);
+    }
+  }
+
+  function _minusProduct(item) {
+    let prdAddedItem = addedItems.filter(prd => prd.id === item.id)[0];
+    let orignalProd = productsList.filter(prd => prd.id === item.id)[0];
+    if (prdAddedItem === undefined) return;
+    if (prdAddedItem?.ammount === 1) {
+      let updatedList = addedItems.filter(prd => prd.id !== item.id);
+      setAddedItems(updatedList);
+      _calcTotalPrice(updatedList);
+    } else if (prdAddedItem?.ammount > 1) {
+      let updatedList = [];
+      addedItems.forEach(element => {
+        if (element.id === item.id) {
+          element.ammount = parseInt(element?.ammount) - 1;
+          element.price =
+            parseInt(element?.price) - parseInt(orignalProd?.price);
+        }
+        updatedList.push(element);
+      });
+      setAddedItems(updatedList);
+      _calcTotalPrice(updatedList);
+    }
+  }
+
+  function _calcTotalPrice(updatedList) {
+    let totalPrice = 0;
+    updatedList.forEach(element => {
+      totalPrice += parseInt(element?.price);
+    });
+    setTotalPrice(totalPrice);
   }
 
   async function _deleteProduct(item) {
@@ -203,7 +254,10 @@ export default function SellerProductsScreen({navigation, route}) {
               marginTop: 10,
             }}>
             <Text style={{color: 'black', fontFamily: 'Poppins-Regular'}}>
-              Select Products you wanted to Buy
+              {`Total Items: ${addedItems.length}`}
+            </Text>
+            <Text style={{color: 'black', fontFamily: 'Poppins-Regular'}}>
+              {`Total Price: ${totalPrice} ${shop?.currency.toUpperCase()}`}
             </Text>
           </View>
         ) : null}
@@ -215,6 +269,7 @@ export default function SellerProductsScreen({navigation, route}) {
               <ProductComp
                 shop={shop}
                 item={item}
+                addedItems={addedItems}
                 isCustomer={isCustomer}
                 metaData={metaData}
                 openImage={item => {
@@ -226,11 +281,8 @@ export default function SellerProductsScreen({navigation, route}) {
                   setCurrectProduct(item);
                 }}
                 navigation={navigation}
-                addProduct={item => _addProduct(item)}
-                addToCart={item => {
-                  setShowAddToCart(true);
-                  setCurrectProduct(item);
-                }}
+                addToCart={item => _addProduct(item)}
+                minusToCart={item => _minusProduct(item)}
               />
             )}
             keyExtractor={item => item.id}
@@ -243,8 +295,7 @@ export default function SellerProductsScreen({navigation, route}) {
             onPress={() => {
               if (isCustomer) {
                 if (addedItems.length > 0) {
-                  //console.log(addedItems);
-                  navigation.replace('SelectedItemsScreen', {
+                  navigation.navigate('SelectedItemsScreen', {
                     itemsList: addedItems,
                     userLoggedIn,
                     shop,

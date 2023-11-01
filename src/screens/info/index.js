@@ -1,10 +1,6 @@
 import {View, Text, StyleSheet} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  APP_NAME,
-  _getAddressFromLatLong,
-  asyncStorageKeys,
-} from '../../config/constants';
+import {_getAddressFromLatLong, asyncStorageKeys} from '../../config/constants';
 import HeaderComp from '../../components/HeaderComp';
 import InputTextComp from '../../components/InputTextComp';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
@@ -23,18 +19,19 @@ import {setLoggedInUser} from '../../config/store/reducers/appReducer';
 import {AppLoaderComp} from '../../components/AppLoaderComp';
 import {_storeIntoAsyncStorage} from '../../config/asyncstorage';
 
-export default function UserInfoScreen({navigation}) {
+export default function UserInfoScreen({navigation, route}) {
+  const {back} = route.params;
   const appStates = useSelector(state => state.appStoredData);
   let {user, shop} = appStates.user;
 
   const mapRef = useRef(null);
   const dispatch = useDispatch();
 
-  const [mobile, setMobile] = useState();
+  const [mobile, setMobile] = useState('');
+  const [address, setAddress] = useState('');
+  const [name, setName] = useState('');
   const [marker, setMarker] = useState();
   const [showLoader, setShowLoader] = useState(false);
-  const [zoomLocation, setZoomLocation] = useState();
-  const [address, setAddress] = useState();
   const [permissionGranted, setPermissionGranted] = useState(false);
 
   useEffect(() => {
@@ -59,21 +56,55 @@ export default function UserInfoScreen({navigation}) {
     console.log(result);
     if (result === 'granted') {
       setPermissionGranted(true);
+      _setInfo();
+    }
+  }
+
+  function _setInfo() {
+    setName(user?.name);
+    if (user?.phone !== '' && user?.phone !== null) {
+      setMobile(user?.phone);
+    }
+    if (user?.homeAddress !== '' && user?.homeAddress !== null) {
+      setAddress(user?.homeAddress);
+      let lat = parseFloat(user?.latitude);
+      let lng = parseFloat(user?.longitude);
+      setMarker({
+        latitude: lat,
+        longitude: lng,
+      });
+      if (mapRef !== null) {
+        mapRef.current.animateToRegion(
+          {
+            latitude: lat,
+            longitude: lng,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          },
+          2000,
+        );
+      }
     }
   }
 
   async function _updateInfo() {
-    if (mobile === undefined) {
+    if (name === '') {
+      toastShow('error', 'Please provide name.');
+      return;
+    }
+
+    if (mobile === '') {
       toastShow('error', 'Please provide mobile number.');
       return;
     }
-    if (address === null) {
+    if (address === '') {
       toastShow('error', 'Please provide home location');
       return;
     }
 
     let params = {
       userId: user?.id,
+      name: name,
       phone: mobile,
       latitude: marker.latitude,
       longitude: marker.longitude,
@@ -102,7 +133,11 @@ export default function UserInfoScreen({navigation}) {
           );
 
           dispatch(setLoggedInUser(userData));
-          navigation.replace('HomeScreen');
+          if (back) {
+            navigation.goBack();
+          } else {
+            navigation.replace('HomeScreen');
+          }
         } else {
           toastShow('error', data.message);
         }
@@ -117,21 +152,27 @@ export default function UserInfoScreen({navigation}) {
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <AppLoaderComp visible={showLoader} />
-      <HeaderComp title={APP_NAME} navigation={navigation} logout={true} />
+      <HeaderComp
+        title={'Update Your Profile'}
+        navigation={navigation}
+        logout={true}
+        backPress={back}
+      />
       {permissionGranted ? (
         <View style={{flex: 1, padding: 10}}>
-          <Text
-            style={{
-              fontSize: 20,
-              color: 'black',
-              fontFamily: 'Poppins-Bold',
-            }}>
-            Provide Your Information
-          </Text>
+          <InputTextComp
+            placeholder={'Name'}
+            value={name}
+            hint={'name'}
+            extraStyle={{marginTop: 5}}
+            onChangeText={text => setName(text)}
+          />
           <InputTextComp
             placeholder={'Phone number'}
             extraStyle={{marginTop: 5}}
             keyboardType="number-pad"
+            value={mobile}
+            hint={'phone number'}
             onChangeText={text => setMobile(text)}
           />
           <View style={{marginTop: 15, flexDirection: 'row'}}>

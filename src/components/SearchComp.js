@@ -16,6 +16,7 @@ export default function SearchComp({extraStyle, onTextChange, pH = 'Search'}) {
           borderColor: '#566573',
           borderWidth: 1,
           backgroundColor: 'white',
+          height: 40,
         },
       ]}>
       <View style={{flex: 0.1}}>

@@ -70,9 +70,12 @@ export default function UserNavHomeScreen({navigation, route}) {
           }}>
           {title === 'Customer' ? `Customer Id: ${userLoggedIn?.user?.id}` : ''}
         </Text>
-        <View style={{marginTop: 10, padding: 10}}>
+        <View style={{marginTop: 10}}>
           <FlatList
             data={navList}
+            contentContainerStyle={{
+              padding: 10,
+            }}
             renderItem={({item}) => (
               <UserNavList
                 item={item}

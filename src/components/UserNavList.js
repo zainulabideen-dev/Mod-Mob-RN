@@ -2,6 +2,8 @@ import React from 'react';
 import {View, Text, TouchableOpacity, Image, Alert} from 'react-native';
 import {DeActivateShopText} from '../config/constants';
 import {toastShow} from '../config/toastmessage';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {COLORS} from '../config/colors';
 
 export default function UserNavList({
   item,
@@ -33,36 +35,56 @@ export default function UserNavList({
   }
 
   return (
-    <TouchableOpacity onPress={() => _handleClick(item)}>
+    <TouchableOpacity
+      onPress={() => _handleClick(item)}
+      style={{
+        backgroundColor: 'white',
+        elevation: 2,
+        padding: 15,
+        marginBottom: 8,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#EAEDED',
+      }}>
       <View
         style={{
           margin: 5,
-          paddingVertical: 10,
-          paddingHorizontal: 15,
-          borderColor: '#2C3E50',
-          borderWidth: 1,
-          borderRadius: 30,
-          backgroundColor: 'white',
           flexDirection: 'row',
+          justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Image
+        <View
           style={{
-            width: 35,
-            height: 35,
-          }}
-          source={item.image}
-        />
-        <Text
-          style={{
-            fontFamily: 'Poppins-Regular',
-            marginLeft: 20,
-            color: 'black',
-            fontSize: 17,
-            includeFontPadding: false,
+            flex: 0.8,
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          {item.heading}
-        </Text>
+          <Image
+            style={{
+              width: 30,
+              height: 30,
+            }}
+            source={item.image}
+          />
+          <Text
+            style={{
+              fontFamily: 'Poppins-Regular',
+              marginLeft: 20,
+              color: 'black',
+              fontSize: 17,
+              includeFontPadding: false,
+            }}>
+            {item.heading}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            flex: 0.2,
+          }}>
+          <AntDesign name="rightcircle" size={20} color={COLORS.primary} />
+        </View>
       </View>
     </TouchableOpacity>
   );

@@ -16,6 +16,7 @@ import {
   setLoggedInUser,
   setMetaData,
 } from '../../config/store/reducers/appReducer';
+import DeviceInfo from 'react-native-device-info';
 
 export default function SplashScreen({navigation}) {
   const dispatch = useDispatch();
@@ -53,10 +54,13 @@ export default function SplashScreen({navigation}) {
     let apiMetaData = await _apiGetMetaData();
     dispatch(setMetaData(apiMetaData));
 
-    // if (apiMetaData.appBuildVersion !== DeviceInfo.getBuildNumber()) {
-    //   navigation.replace('AppUpdateScreen', {metaData: apiMetaData});
-
-    // }
+    console.log(
+      apiMetaData.appBuildVersion + '--' + DeviceInfo.getBuildNumber(),
+    );
+    if (apiMetaData.appBuildVersion !== DeviceInfo.getBuildNumber()) {
+      navigation.replace('AppUpdateScreen', {metaData: apiMetaData});
+      return;
+    }
 
     const onBoarding = await _getFromAsyncStorage(asyncStorageKeys.onBoarding);
     if (!onBoarding) {
@@ -79,7 +83,9 @@ export default function SplashScreen({navigation}) {
           loggedInUserJson?.user?.homeAddress === null ||
           loggedInUserJson?.user?.homeAddress === ''
         ) {
-          navigation.replace('UserInfoScreen');
+          navigation.replace('UserInfoScreen', {
+            back: false,
+          });
         } else {
           navigation.replace('HomeScreen');
         }

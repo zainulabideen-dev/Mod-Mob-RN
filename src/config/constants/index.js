@@ -248,3 +248,33 @@ export async function _getAddressFromLatLong(marker) {
 export function _numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+export function _constGetSize(x) {
+  if (x === 'S') {
+    return '- Small';
+  } else if (x === 'M') {
+    return '- Medium';
+  } else if (x === 'L') {
+    return '- Large';
+  } else if (x === 'XL') {
+    return '- Extra Large';
+  } else if (x === '') {
+    return '';
+  } else {
+    return '';
+  }
+}
+
+export function _constCheckOutOfStock(item, totalPrdList, addedPrdList) {
+  let orignalProd = totalPrdList.filter(prd => prd.id === item.id)[0];
+  let addedProd = addedPrdList.filter(prd => prd.id === item.id)[0];
+
+  let orignalPrdStock = parseInt(orignalProd?.inStock);
+  let addedPrdStock = parseInt(addedProd?.ammount);
+
+  if (addedPrdStock >= orignalPrdStock) {
+    return true;
+  } else {
+    return false;
+  }
+}

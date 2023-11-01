@@ -58,7 +58,9 @@ export default function SignInScreen({navigation}) {
             userData?.user?.homeAddress === null ||
             userData?.user?.homeAddress === ''
           ) {
-            navigation.replace('UserInfoScreen');
+            navigation.replace('UserInfoScreen', {
+              back: false,
+            });
           } else {
             navigation.replace('HomeScreen');
           }

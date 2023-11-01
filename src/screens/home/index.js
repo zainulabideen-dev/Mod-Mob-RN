@@ -1,19 +1,24 @@
-import {StyleSheet, View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import React from 'react';
 import HeaderComp from '../../components/HeaderComp';
 import {_getFromAsyncStorage} from '../../config/asyncstorage';
 import HomeOptionsComp from '../../components/HomeOptionsComp';
-import {APP_NAME} from '../../config/constants';
+import {useSelector} from 'react-redux';
+import ProfileComp from '../../components/ProfileComp';
 
 export default function HomeScreen({navigation}) {
+  const appStates = useSelector(state => state.appStoredData);
+  let user = appStates?.user;
+
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: 'white',
       }}>
+      <StatusBar backgroundColor={'#1ABC9C'} />
       <HeaderComp
-        title={'MeriOnlineDukan'}
+        title={'Meri Online Dukan'}
         navigation={navigation}
         logout={true}
       />
@@ -21,34 +26,21 @@ export default function HomeScreen({navigation}) {
         style={{
           flex: 1,
           padding: 10,
-          justifyContent: 'space-between',
         }}>
-        <HomeOptionsComp title={'Customer'} navigation={navigation} />
-        <HomeOptionsComp title={APP_NAME} navigation={navigation} />
+        <ProfileComp user={user} navigation={navigation} />
+        <HomeOptionsComp
+          title={'Customer'}
+          desc={'Buy your favourite products online'}
+          image={require('../../assets/target.png')}
+          navigation={navigation}
+        />
+        <HomeOptionsComp
+          title={'ShopKeeper'}
+          desc={'Create and manage your own online shop'}
+          image={require('../../assets/shop_icon.png')}
+          navigation={navigation}
+        />
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  customerText: {
-    margin: 15,
-    textAlign: 'left',
-    fontSize: 25,
-    color: 'black',
-    fontFamily: 'Poppins-Regular',
-    width: '100%',
-    paddingHorizontal: 20,
-  },
-  onlineSellerText: {
-    margin: 15,
-    textAlign: 'left',
-    fontSize: 25,
-    color: 'white',
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    fontFamily: 'Poppins-Regular',
-    width: '100%',
-  },
-});

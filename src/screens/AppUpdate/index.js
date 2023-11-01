@@ -40,7 +40,7 @@ export default function AppUpdateScreen({route}) {
           extraStyle={{marginTop: 20}}
           onPress={() =>
             Linking.openURL(
-              'http://play.google.com/store/apps/details?id=com.onlinesellercwz',
+              'http://play.google.com/store/apps/details?id=com.modrn',
             )
           }
         />

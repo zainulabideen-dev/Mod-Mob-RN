@@ -49,7 +49,7 @@ export default function ShopItemsComp({item, onShopPress, addToFav, metaData}) {
               height: 100,
               width: '100%',
             }}
-            resizeMode="contain"
+            resizeMode="cover"
             borderRadius={5}
             source={{uri: item.shopImage}}
           />

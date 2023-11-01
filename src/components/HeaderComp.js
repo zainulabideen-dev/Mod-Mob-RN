@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {_deleteFromAsyncStorage} from '../config/asyncstorage';
 import {asyncStorageKeys} from '../config/constants';
 import {useSelector} from 'react-redux';
@@ -48,7 +48,7 @@ export default function HeaderComp({
         alignItems: 'center',
         paddingHorizontal: 10,
         elevation: 5,
-        backgroundColor: 'white',
+        backgroundColor: '#1ABC9C',
       }}>
       <LogoutModal
         visible={showLogoutModal}
@@ -63,7 +63,7 @@ export default function HeaderComp({
             }}
             name={'left'}
             size={25}
-            color={'black'}
+            color={'white'}
           />
         </TouchableWithoutFeedback>
       ) : null}
@@ -78,7 +78,7 @@ export default function HeaderComp({
             style={{
               marginLeft: 10,
               fontSize: 19,
-              color: 'black',
+              color: 'white',
               fontWeight: '500',
               fontFamily: 'Poppins-Regular',
               includeFontPadding: false,
@@ -93,16 +93,17 @@ export default function HeaderComp({
             justifyContent: 'flex-end',
             alignItems: 'center',
           }}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Image
               style={{
-                width: 30,
-                height: 30,
+                width: 25,
+                height: 25,
                 borderRadius: 15,
               }}
               source={{uri: userLoggedIn.user.photo}}
             />
           </TouchableOpacity>
+           */}
           {edit ? (
             <TouchableOpacity
               onPress={() =>
@@ -117,19 +118,19 @@ export default function HeaderComp({
                 }}
                 name={'pencil'}
                 size={25}
-                color={'black'}
+                color={'white'}
               />
             </TouchableOpacity>
           ) : null}
           {logout ? (
             <TouchableWithoutFeedback onPress={() => setShowLogoutModal(true)}>
-              <MaterialIcons
+              <MaterialCommunityIcons
                 style={{
                   marginLeft: 15,
                 }}
                 name={'logout'}
                 size={25}
-                color={'black'}
+                color={'white'}
               />
             </TouchableWithoutFeedback>
           ) : null}

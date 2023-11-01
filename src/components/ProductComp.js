@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {COLORS} from '../config/colors';
-import {_numberWithCommas} from '../config/constants';
+import {_constGetSize, _numberWithCommas} from '../config/constants';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 export default function ProductComp({
@@ -18,8 +18,10 @@ export default function ProductComp({
   moreOptions,
   openImage,
   addToCart,
+  minusToCart,
+  addedItems,
 }) {
-  let colorList = item?.colors !== '' ? item?.colors.split(',') : [];
+  let prdAddedItem = addedItems.filter(prd => prd.id === item.id)[0];
 
   return (
     <View
@@ -30,7 +32,7 @@ export default function ProductComp({
           paddingHorizontal: 5,
           paddingVertical: 5,
         }}>
-        <View style={{flex: 0.3}}>
+        <View style={{flex: 0.4}}>
           <TouchableWithoutFeedback onPress={() => openImage(item)}>
             <Image
               style={{
@@ -42,15 +44,39 @@ export default function ProductComp({
               source={{uri: item.photo}}
             />
           </TouchableWithoutFeedback>
+          {item?.colors !== '' ? (
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text
+                style={{
+                  color: 'black',
+                  fontFamily: 'Poppins-Regular',
+                  marginRight: 5,
+                  fontSize: 12,
+                }}>
+                Color
+              </Text>
+              <View
+                style={{
+                  alignItems: 'center',
+                  borderWidth: 1,
+                  borderColor: COLORS.gray_100,
+                  borderRadius: 5,
+                  width: 17,
+                  height: 17,
+                  marginRight: 5,
+                  backgroundColor: item?.colors,
+                }}></View>
+            </View>
+          ) : null}
         </View>
-        <View style={{paddingLeft: 10, flex: 0.7}}>
+        <View style={{paddingLeft: 10, flex: 0.6}}>
           <Text
             style={{
               fontSize: 17,
               color: 'black',
-              fontFamily: 'Poppins-Medium',
+              fontFamily: 'Poppins-Regu',
             }}>
-            {item.name}
+            {`${item.name} ${_constGetSize(item?.size)}`}
           </Text>
           <Text
             style={{
@@ -61,77 +87,71 @@ export default function ProductComp({
               item.unit === '' ? 'item' : item.unit
             } = ${_numberWithCommas(item.price)} ${shop.currency}`}
           </Text>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{justifyContent: 'flex-end'}}></View>
+          </View>
           {isCustomer ? (
-            <TouchableOpacity
-              onPress={() => addToCart(item)}
-              style={{
-                marginVertical: 10,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  backgroundColor: '#17A589',
-                  padding: 10,
-                  color: 'white',
-                  borderRadius: 5,
-                }}>
-                Add To Cart
-              </Text>
-            </TouchableOpacity>
-          ) : null}
-          {!isCustomer ? (
             <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 0.5}}>
-                {item?.size !== '' ? (
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontFamily: 'Poppins-Regular',
-                      fontSize: 17,
-                    }}>
-                    {`Size: ${item?.size}`}
-                  </Text>
-                ) : null}
-              </View>
-              <View style={{flex: 0.5, justifyContent: 'flex-end'}}>
-                {colorList.length > 0 ? (
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontFamily: 'Poppins-Regular',
-                      fontSize: 17,
-                    }}>
-                    Color
-                  </Text>
-                ) : null}
-                <View
+              <TouchableOpacity
+                onPress={() => minusToCart(item)}
+                style={{
+                  marginVertical: 10,
+                  borderRadius: 5,
+                  width: 25,
+                  height: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'black',
+                }}>
+                <Text
                   style={{
-                    flexDirection: 'row',
-                    marginTop: 3,
+                    fontSize: 15,
+                    color: 'white',
                   }}>
-                  {colorList.map((item, i) => {
-                    return (
-                      <TouchableOpacity
-                        key={i}
-                        onPress={() => {
-                          console.log('test');
-                        }}>
-                        <View
-                          style={{
-                            alignItems: 'center',
-                            borderWidth: 1,
-                            borderColor: COLORS.gray_100,
-                            borderRadius: 5,
-                            width: 30,
-                            height: 30,
-                            marginRight: 5,
-                            backgroundColor: item,
-                          }}></View>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+                  -
+                </Text>
+              </TouchableOpacity>
+              <View
+                style={{
+                  marginVertical: 10,
+                  borderRadius: 5,
+                  width: 25,
+                  height: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderColor: 'black',
+                  borderWidth: 1,
+                  marginHorizontal: 10,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: 'black',
+                  }}>
+                  {prdAddedItem?.ammount === undefined
+                    ? '0'
+                    : prdAddedItem?.ammount}
+                </Text>
               </View>
+              <TouchableOpacity
+                onPress={() => addToCart(item)}
+                style={{
+                  marginVertical: 10,
+                  borderRadius: 5,
+                  width: 25,
+                  height: 25,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'black',
+                }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: 'white',
+                  }}>
+                  +
+                </Text>
+              </TouchableOpacity>
             </View>
           ) : null}
         </View>

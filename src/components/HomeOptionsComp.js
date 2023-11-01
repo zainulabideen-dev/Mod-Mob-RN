@@ -1,69 +1,60 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {APP_NAME} from '../config/constants';
+import {COLORS} from '../config/colors';
 
-export default function HomeOptionsComp({title, navigation}) {
-  let mb = 0;
-  let mt = 0;
-  let resizeMode = 'cover';
-  let image = require('../assets/customers.png');
-  if (title == APP_NAME) {
-    mb = 30;
-    mt = 45;
-    image = require('../assets/becomeSeller.jpeg');
-    resizeMode = 'contain';
-  }
-
+export default function HomeOptionsComp({title, navigation, desc, image}) {
   return (
-    <ImageBackground
-      resizeMode={resizeMode}
-      borderRadius={20}
-      source={image}
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('UserNavHomeScreen', {
+          title,
+        })
+      }
       style={{
-        flex: 0.5,
-        width: '100%',
-        alignItems: 'center',
-        marginBottom: mb,
-        marginTop: mt,
+        backgroundColor: 'white',
+        elevation: 2,
+        padding: 15,
+        marginBottom: 5,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#EAEDED',
       }}>
-      <Text
-        style={
-          title === 'Customer' ? styles.customerText : styles.onlineSellerText
-        }>
-        {title}
-      </Text>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('UserNavHomeScreen', {
-            title,
-          })
-        }
-        style={{
-          position: 'absolute',
-          bottom: -30,
-        }}>
+      <View>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Image
+            style={{
+              width: 25,
+              height: 25,
+            }}
+            source={image}
+          />
+          <Text
+            style={{
+              fontSize: 18,
+              color: 'black',
+              fontFamily: 'Poppins-Regular',
+              marginLeft: 10,
+            }}>
+            {title}
+          </Text>
+        </View>
+        <Text
+          style={{
+            fontFamily: 'Poppins-Regular',
+          }}>
+          {desc}
+        </Text>
         <View
           style={{
-            width: 60,
-            height: 60,
-            backgroundColor: 'white',
-            borderRadius: 30,
-            borderColor: 'black',
-            borderWidth: 2,
-            justifyContent: 'center',
-            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginTop: 10,
           }}>
-          <AntDesign name="right" size={25} color={'black'} />
+          <AntDesign name="rightcircle" size={20} color={COLORS.primary} />
         </View>
-      </TouchableOpacity>
-    </ImageBackground>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -71,7 +62,7 @@ const styles = StyleSheet.create({
   customerText: {
     margin: 15,
     textAlign: 'left',
-    fontSize: 25,
+    fontSize: 20,
     color: 'black',
     fontFamily: 'Poppins-Regular',
     width: '100%',
@@ -80,7 +71,7 @@ const styles = StyleSheet.create({
   onlineSellerText: {
     margin: 15,
     textAlign: 'left',
-    fontSize: 25,
+    fontSize: 20,
     color: 'white',
     paddingVertical: 5,
     paddingHorizontal: 20,
