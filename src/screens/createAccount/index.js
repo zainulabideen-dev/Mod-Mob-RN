@@ -16,6 +16,7 @@ import messaging from '@react-native-firebase/messaging';
 import {toastShow} from '../../config/toastmessage';
 import InputTextComp from '../../components/InputTextComp';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import HeaderComp from '../../components/HeaderComp';
 
 export default function CreateAccountScreen({navigation}) {
   const [showLoader, setShowLoader] = useState(false);
@@ -58,13 +59,13 @@ export default function CreateAccountScreen({navigation}) {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <StatusBar backgroundColor={'#2C3E50'} />
+      <StatusBar backgroundColor={COLORS.primary} />
+      <HeaderComp
+        title={'Create New Account'}
+        navigation={navigation}
+        backPress={true}
+      />
       <AppLoaderComp visible={showLoader} />
-      <View style={{padding: 10}}>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <AntDesign name={'left'} size={25} color={'black'} />
-        </TouchableWithoutFeedback>
-      </View>
 
       <View style={{flex: 0.3}}>
         <Image

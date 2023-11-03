@@ -50,6 +50,7 @@ export const CUSTOMER_NAV = [
     screen: 'OnlineSellerScreen',
     image: require('../../assets/map-pointer.png'),
     isCustomer: true,
+    addSales: true,
   },
   {
     id: 2,
@@ -57,6 +58,7 @@ export const CUSTOMER_NAV = [
     screen: 'PlaceOrdersScreen',
     image: require('../../assets/to-do-list.png'),
     isCustomer: true,
+    addSales: true,
   },
   {
     id: 3,
@@ -64,6 +66,7 @@ export const CUSTOMER_NAV = [
     screen: 'FavouriteSellerScreen',
     image: require('../../assets/heart.png'),
     isCustomer: true,
+    addSales: true,
   },
 ];
 
@@ -74,6 +77,7 @@ export const SELLER_NAV = [
     screen: 'SellerInfoScreen',
     image: require('../../assets/map-pointer.png'),
     isCustomer: false,
+    addSales: false,
   },
   {
     id: 2,
@@ -81,6 +85,7 @@ export const SELLER_NAV = [
     screen: 'SellerProductsScreen',
     image: require('../../assets/products.png'),
     isCustomer: false,
+    addSales: false,
   },
   {
     id: 3,
@@ -88,6 +93,15 @@ export const SELLER_NAV = [
     screen: 'PlaceOrdersScreen',
     image: require('../../assets/to-do-list.png'),
     isCustomer: false,
+    addSales: false,
+  },
+  {
+    id: 8,
+    heading: 'Add Sales',
+    screen: 'SellerProductsScreen',
+    image: require('../../assets/to-do-list.png'),
+    isCustomer: true,
+    addSales: true,
   },
   {
     id: 4,
@@ -95,6 +109,7 @@ export const SELLER_NAV = [
     screen: 'ShopCustomersScreen',
     image: require('../../assets/target.png'),
     isCustomer: false,
+    addSales: false,
   },
   {
     id: 5,
@@ -102,6 +117,7 @@ export const SELLER_NAV = [
     screen: 'DeliveryAreasScreen',
     image: require('../../assets/tracking.png'),
     isCustomer: false,
+    addSales: false,
   },
   {
     id: 6,
@@ -109,6 +125,7 @@ export const SELLER_NAV = [
     screen: 'SellerRatingsScreen',
     image: require('../../assets/rating.png'),
     isCustomer: false,
+    addSales: false,
   },
   {
     id: 7,
@@ -116,6 +133,7 @@ export const SELLER_NAV = [
     screen: '',
     image: require('../../assets/switch.png'),
     isCustomer: false,
+    addSales: false,
   },
 ];
 
@@ -269,7 +287,7 @@ export function _constCheckOutOfStock(item, totalPrdList, addedPrdList) {
   let orignalProd = totalPrdList.filter(prd => prd.id === item.id)[0];
   let addedProd = addedPrdList.filter(prd => prd.id === item.id)[0];
 
-  let orignalPrdStock = parseInt(orignalProd?.inStock);
+  let orignalPrdStock = parseInt(orignalProd?.remainStock);
   let addedPrdStock = parseInt(addedProd?.ammount);
 
   if (addedPrdStock >= orignalPrdStock) {

@@ -10,7 +10,7 @@ import {toastShow} from '../../config/toastmessage';
 import {_numberWithCommas} from '../../config/constants';
 
 export default function SelectedItemsScreen({navigation, route}) {
-  const {shop, itemsList, productsList} = route.params;
+  const {shop, itemsList, productsList, addSales} = route.params;
 
   const [filterProductsList, setFilterProductsList] = useState(itemsList);
   const [addedItems, setAddedItems] = useState(itemsList);
@@ -126,6 +126,7 @@ export default function SelectedItemsScreen({navigation, route}) {
       totalPrice,
       items: addedItems,
       shop,
+      addSales,
     });
   }
 
@@ -133,7 +134,7 @@ export default function SelectedItemsScreen({navigation, route}) {
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <HeaderComp
         backPress={true}
-        title={'Shop Products'}
+        title={'Review List'}
         navigation={navigation}
       />
       <View style={{flex: 1, padding: 15}}>
@@ -148,10 +149,10 @@ export default function SelectedItemsScreen({navigation, route}) {
             marginTop: 10,
           }}>
           <Text style={{color: 'black', fontFamily: 'Poppins-Regular'}}>
-            {`Total Price = ${_numberWithCommas(totalPrice)} ${shop.currency}`}
+            {`Total Items = ${addedItems.length}`}
           </Text>
           <Text style={{color: 'black', fontFamily: 'Poppins-Regular'}}>
-            {`Total Items = ${addedItems.length}`}
+            {`Total Price = ${_numberWithCommas(totalPrice)} ${shop.currency}`}
           </Text>
         </View>
         <View style={{marginTop: 10, flex: 0.9}}>
@@ -160,18 +161,11 @@ export default function SelectedItemsScreen({navigation, route}) {
             data={filterProductsList}
             renderItem={({item}) => (
               <SelectedItemComp
-                shop={shop}
                 item={item}
+                shop={shop}
                 productsList={productsList}
-                onChangeAmount={val => {
-                  _calculate(addedItems, val, item);
-                }}
-                onColorSizeSelected={(val, type) => {
-                  _setColorSizes(addedItems, val, item, type);
-                }}
                 removeItem={item => {
                   let list = addedItems.filter(adt => adt.rowId !== item.rowId);
-                  console.log(list);
                   setAddedItems(list);
                   setFilterProductsList(list);
                 }}

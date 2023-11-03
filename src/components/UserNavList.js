@@ -30,6 +30,7 @@ export default function UserNavList({
         isCustomer: item.isCustomer,
         shop: userLoggedIn?.shop,
         metaData,
+        addSales: item.addSales,
       });
     }
   }

@@ -44,7 +44,12 @@ export const SubmitReviewModal = ({visible, submit, onCloseModal}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={{color: 'black', fontSize: 20, fontWeight: 'bold'}}>
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 20,
+                fontFamily: 'Poppins-Regular',
+              }}>
               Submit Review
             </Text>
             <TouchableOpacity onPress={() => onCloseModal()}>
@@ -76,6 +81,8 @@ export const SubmitReviewModal = ({visible, submit, onCloseModal}) => {
                   setError(
                     'Please write at least a sentence greater then 20 letters',
                   );
+                } else {
+                  setError('');
                 }
                 setReview(text);
               }}
@@ -84,10 +91,13 @@ export const SubmitReviewModal = ({visible, submit, onCloseModal}) => {
           <Text
             style={{
               textAlign: 'right',
+              fontFamily: 'Poppins-Regular',
             }}>
             {review.length}/240
           </Text>
-          <Text style={{color: 'red'}}>{error.length > 1 ? error : ''}</Text>
+          <Text style={{color: 'red', fontFamily: 'Poppins-Regular'}}>
+            {error.length > 1 ? error : ''}
+          </Text>
           <Rating
             type="star"
             ratingCount={5}

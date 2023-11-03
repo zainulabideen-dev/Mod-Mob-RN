@@ -1,6 +1,5 @@
 import {View, Text, TouchableOpacity, Modal, StatusBar} from 'react-native';
 import React, {useState} from 'react';
-import {placeOrderStatus, placeOrderStatusCustomer} from '../config/constants';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {COLORS} from '../config/colors';
 import Fontisto from 'react-native-vector-icons/Fontisto';

@@ -77,14 +77,12 @@ export const SearchSelectionModal = ({
         style={{
           flex: 1,
           backgroundColor: 'rgba(0,0,0,0.75)',
-          justifyContent: 'center',
-          padding: 15,
         }}>
         <View
           style={{
             backgroundColor: '#F8F9F9',
             padding: 15,
-            borderRadius: 15,
+            flex: 1,
           }}>
           <View
             style={{

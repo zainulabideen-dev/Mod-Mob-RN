@@ -32,8 +32,8 @@ export default function SignInScreen({navigation}) {
   async function _signIn(fcmToken) {
     setShowLoader(true);
     let params = {
-      userName: gmailId,
-      password: password,
+      userName: gmailId.toString().trim(),
+      password: password.toString().trim(),
       fcmToken: fcmToken,
       action: 'signIn',
     };
@@ -77,7 +77,7 @@ export default function SignInScreen({navigation}) {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <StatusBar backgroundColor={'#2C3E50'} />
+      <StatusBar backgroundColor={COLORS.primary} />
       <AppLoaderComp visible={showLoader} />
       <ForgotPassowrdModal
         visible={showForgotPassModal}

@@ -101,11 +101,11 @@ export default function ProductComp({
                   height: 25,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: 'black',
+                  backgroundColor: COLORS.primary,
                 }}>
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 17,
                     color: 'white',
                   }}>
                   -
@@ -142,7 +142,7 @@ export default function ProductComp({
                   height: 25,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: 'black',
+                  backgroundColor: COLORS.primary,
                 }}>
                 <Text
                   style={{

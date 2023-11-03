@@ -40,7 +40,7 @@ export default function CreateProductScreen({navigation, route}) {
       setPrice(parseInt(item.price));
       setItemPrice(parseInt(item.price));
 
-      setProductSize(item.size.split(','));
+      setProductSize(item.size);
       if (item.colors !== '') {
         setProductColors(item.colors.split(','));
       }

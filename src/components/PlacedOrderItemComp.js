@@ -9,10 +9,10 @@ export default function PlacedOrderItemComp({item, currency}) {
     <View
       key={item.id}
       style={{
-        backgroundColor: 'white',
         borderRadius: 7,
-        elevation: 1,
         marginBottom: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#E5E8E8',
       }}>
       <View
         style={{

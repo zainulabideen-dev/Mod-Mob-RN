@@ -20,7 +20,7 @@ export default function PlaceOrderScreen({navigation, route}) {
   const appStates = useSelector(state => state.appStoredData);
   let {user} = appStates.user;
 
-  const {items, shop, totalPrice} = route.params;
+  const {items, shop, totalPrice, addSales} = route.params;
 
   const [bolPFS, setBolPFS] = useState(true);
   const [distanceKm, setDistanceKm] = useState();
@@ -76,12 +76,17 @@ export default function PlaceOrderScreen({navigation, route}) {
       totalPrice: price,
       totalItems: items.length,
       items,
-      orderType: 'CST',
+      orderType: addSales ? 'SK' : 'CST',
       shopId: shop.id,
       deliveryCharges: bolPFS ? '0' : calcDeliveryCharges,
       pickFromShop: bolPFS ? '1' : '0',
       platform: 'mob',
     };
+
+    if (addSales) {
+      params.rcvAmount = price;
+      params.customerId = 'user.id';
+    }
 
     try {
       setShowLoader(true);
@@ -131,64 +136,66 @@ export default function PlaceOrderScreen({navigation, route}) {
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <AppLoaderComp visible={showLoader} />
       <HeaderComp
-        title={'Place Order'}
+        title={addSales ? 'Confirm Sale' : 'Confirm Order'}
         navigation={navigation}
         backPress={true}
       />
 
       <ScrollView style={{padding: 15, flex: 1}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 20,
-          }}>
+        {addSales ? null : (
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 1,
-              borderColor: '#D5DBDB',
-              borderRadius: 5,
-              flex: 0.5,
-              height: 40,
-              backgroundColor: bolPFS ? 'green' : 'white',
+              marginBottom: 20,
             }}>
-            <TouchableOpacity onPress={() => setBolPFS(true)}>
-              <Text
-                style={{
-                  color: bolPFS ? 'white' : 'black',
-                  fontFamily: 'Poppins-Regular',
-                  textAlign: 'center',
-                }}>
-                Pick From Shop
-              </Text>
-            </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1,
+                borderColor: '#D5DBDB',
+                borderRadius: 5,
+                flex: 0.5,
+                height: 40,
+                backgroundColor: bolPFS ? 'green' : 'white',
+              }}>
+              <TouchableOpacity onPress={() => setBolPFS(true)}>
+                <Text
+                  style={{
+                    color: bolPFS ? 'white' : 'black',
+                    fontFamily: 'Poppins-Regular',
+                    textAlign: 'center',
+                  }}>
+                  Pick From Shop
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1,
+                borderColor: '#D5DBDB',
+                borderRadius: 5,
+                flex: 0.5,
+                height: 40,
+                marginLeft: 5,
+                backgroundColor: bolPFS ? 'white' : 'green',
+              }}>
+              <TouchableOpacity onPress={() => setBolPFS(false)}>
+                <Text
+                  style={{
+                    color: bolPFS ? 'black' : 'white',
+                    fontFamily: 'Poppins-Regular',
+                  }}>
+                  Online Delivery
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 1,
-              borderColor: '#D5DBDB',
-              borderRadius: 5,
-              flex: 0.5,
-              height: 40,
-              marginLeft: 5,
-              backgroundColor: bolPFS ? 'white' : 'green',
-            }}>
-            <TouchableOpacity onPress={() => setBolPFS(false)}>
-              <Text
-                style={{
-                  color: bolPFS ? 'black' : 'white',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                Online Delivery
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        )}
 
         <View>
           <InfoTextComp
@@ -219,58 +226,67 @@ export default function PlaceOrderScreen({navigation, route}) {
           extraStyle={{marginTop: 5}}
         />
 
-        <View style={{marginTop: 5, flexDirection: 'row'}}>
-          <View>
-            <Text
+        {addSales ? null : (
+          <>
+            <View style={{marginTop: 5, flexDirection: 'row'}}>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    color: 'black',
+                    fontFamily: 'Poppins-SemiBold',
+                  }}>
+                  Delivery location
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontFamily: 'Poppins-Regular',
+                    includeFontPadding: false,
+                  }}>
+                  {user?.homeAddress}
+                </Text>
+              </View>
+            </View>
+            <View
               style={{
-                fontSize: 17,
-                color: 'black',
-                fontFamily: 'Poppins-SemiBold',
-              }}>
-              Delivery location
-            </Text>
-            <Text
+                backgroundColor: COLORS.gray_100,
+                height: 1,
+                marginTop: 5,
+              }}
+            />
+            <View style={{marginTop: 15, flexDirection: 'row'}}>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    color: 'black',
+                    fontFamily: 'Poppins-SemiBold',
+                  }}>
+                  Contact Phone
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontFamily: 'Poppins-Regular',
+                    includeFontPadding: false,
+                  }}>
+                  {user?.phone}
+                </Text>
+              </View>
+            </View>
+            <View
               style={{
-                color: 'black',
-                fontFamily: 'Poppins-Regular',
-                includeFontPadding: false,
-              }}>
-              {user?.homeAddress}
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{backgroundColor: COLORS.gray_100, height: 1, marginTop: 5}}
-        />
-
-        <View style={{marginTop: 15, flexDirection: 'row'}}>
-          <View>
-            <Text
-              style={{
-                fontSize: 17,
-                color: 'black',
-                fontFamily: 'Poppins-SemiBold',
-              }}>
-              Contact Phone
-            </Text>
-            <Text
-              style={{
-                color: 'black',
-                fontFamily: 'Poppins-Regular',
-                includeFontPadding: false,
-              }}>
-              {user?.phone}
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{backgroundColor: COLORS.gray_100, height: 1, marginTop: 5}}
-        />
-
+                backgroundColor: COLORS.gray_100,
+                height: 1,
+                marginTop: 5,
+              }}
+            />
+          </>
+        )}
         <Text
           style={{
-            marginLeft: 10,
-            marginTop: 15,
+            marginTop: 5,
             color: 'black',
             fontSize: 17,
             color: 'black',
@@ -281,7 +297,6 @@ export default function PlaceOrderScreen({navigation, route}) {
 
         <Text
           style={{
-            marginLeft: 10,
             color: 'black',
             fontFamily: 'Poppins-Bold',
             fontSize: 20,

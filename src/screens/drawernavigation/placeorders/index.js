@@ -181,12 +181,10 @@ export default function PlaceOrdersScreen({navigation, route}) {
       {showFilter ? (
         <PlaceOrderFilterComp
           currentStatus={currentStatus}
-          metaData={metaData}
-          isCustomer={isCustomer}
           onCloseFilter={() => setShowFilter(false)}
+          showDatePicker={() => setShowDatePicker(true)}
           filterDate={filterDate}
           applyFilters={(p1, p2) => _applyFilters(p1, p2)}
-          showDatePicker={() => setShowDatePicker(true)}
           clearFilter={() => {
             let status = '';
             if (isCustomer) {
@@ -198,6 +196,7 @@ export default function PlaceOrdersScreen({navigation, route}) {
             setFilterDate('Select Date');
             _applyFilters(status, 'Select Date');
           }}
+          metaData={metaData}
         />
       ) : null}
       <DatePicker

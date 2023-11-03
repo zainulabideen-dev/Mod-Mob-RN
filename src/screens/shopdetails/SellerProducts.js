@@ -19,7 +19,7 @@ import AddToCardComp from '../../components/AddToCardComp';
 import {_constCheckOutOfStock} from '../../config/constants';
 
 export default function SellerProductsScreen({navigation, route}) {
-  const {userLoggedIn, shop, isCustomer, metaData} = route.params;
+  const {userLoggedIn, shop, isCustomer, metaData, addSales} = route.params;
   let user = userLoggedIn.user;
 
   const [productsList, setProductsList] = useState([]);
@@ -81,6 +81,7 @@ export default function SellerProductsScreen({navigation, route}) {
     if (prdAddedItem.length === 0) {
       let addItem = {
         id: item?.id,
+        rowId: addedItems.length + 1,
         ammount: 1,
         name: item?.name,
         photo: item?.photo,
@@ -242,6 +243,15 @@ export default function SellerProductsScreen({navigation, route}) {
         />
       ) : null}
 
+      {addSales ? (
+        <HeaderComp
+          backPress={true}
+          userLoggedIn={userLoggedIn}
+          title={'Add Sales'}
+          navigation={navigation}
+        />
+      ) : null}
+
       <View style={{flex: 1, padding: 15}}>
         <SearchComp onTextChange={text => searchProducts(text)} />
         {isCustomer ? (
@@ -269,20 +279,18 @@ export default function SellerProductsScreen({navigation, route}) {
               <ProductComp
                 shop={shop}
                 item={item}
-                addedItems={addedItems}
                 isCustomer={isCustomer}
-                metaData={metaData}
-                openImage={item => {
-                  setCurrectProduct(item);
-                  setShowFullImage(true);
-                }}
                 moreOptions={item => {
                   setShowMoreOptions(true);
                   setCurrectProduct(item);
                 }}
-                navigation={navigation}
+                openImage={item => {
+                  setCurrectProduct(item);
+                  setShowFullImage(true);
+                }}
                 addToCart={item => _addProduct(item)}
                 minusToCart={item => _minusProduct(item)}
+                addedItems={addedItems}
               />
             )}
             keyExtractor={item => item.id}
@@ -301,6 +309,7 @@ export default function SellerProductsScreen({navigation, route}) {
                     shop,
                     metaData,
                     productsList,
+                    addSales,
                   });
                 } else {
                   toastShow('error', 'Please Select Products');

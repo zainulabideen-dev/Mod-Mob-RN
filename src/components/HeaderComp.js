@@ -23,6 +23,7 @@ export default function HeaderComp({
 }) {
   const appStates = useSelector(state => state.appStoredData);
   let userLoggedIn = appStates?.user;
+  console.log(userLoggedIn);
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
@@ -50,11 +51,13 @@ export default function HeaderComp({
         elevation: 5,
         backgroundColor: '#1ABC9C',
       }}>
-      <LogoutModal
-        visible={showLogoutModal}
-        logout={() => _clearDataLogOut()}
-        closeModal={() => setShowLogoutModal(false)}
-      />
+      {userLoggedIn !== null ? (
+        <LogoutModal
+          visible={showLogoutModal}
+          logout={() => _clearDataLogOut()}
+          closeModal={() => setShowLogoutModal(false)}
+        />
+      ) : null}
       {backPress ? (
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
           <AntDesign
@@ -77,7 +80,7 @@ export default function HeaderComp({
           <Text
             style={{
               marginLeft: 10,
-              fontSize: 19,
+              fontSize: 17,
               color: 'white',
               fontWeight: '500',
               fontFamily: 'Poppins-Regular',
@@ -104,7 +107,7 @@ export default function HeaderComp({
             />
           </TouchableOpacity>
            */}
-          {edit ? (
+          {edit && userLoggedIn !== null ? (
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('CreateOnlineShopScreen', {

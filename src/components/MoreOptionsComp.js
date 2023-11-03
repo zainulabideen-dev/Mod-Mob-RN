@@ -13,104 +13,60 @@ export default function MoreOptionsComp({showHide, list, onPress}) {
       style={{
         position: 'absolute',
         zIndex: 2,
-        backgroundColor: 'white',
         bottom: 0,
         width: '100%',
-        padding: 20,
-        borderTopWidth: 1,
-        borderTopColor: '#D5DBDB',
+        height: '100%',
+        justifyContent: 'flex-end',
+        backgroundColor: 'rgba(0,0,0,0.45)',
       }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-        <Text
+      <View style={{backgroundColor: 'white', padding: 20}}>
+        <View
           style={{
-            color: 'black',
-            fontSize: 17,
-            color: 'black',
-            fontFamily: 'Poppins-Regular',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}>
-          More Options
-        </Text>
-        <TouchableWithoutFeedback onPress={() => showHide(false)}>
-          <AntDesign name="close" size={20} color={'black'} />
-        </TouchableWithoutFeedback>
-      </View>
-
-      <View
-        style={{
-          marginTop: 15,
-        }}>
-        {list.map((item, _i) => {
-          return (
-            <TouchableOpacity
-              key={_i}
-              style={{marginBottom: 15}}
-              onPress={() => {
-                onPress(item);
-              }}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 17,
-                  color: 'black',
-                  fontFamily: 'Poppins-Regular',
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#D5DBDB',
-                  paddingBottom: 5,
-                }}>
-                {item}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-
-      {/* <View
+          <Text
             style={{
-              marginTop: 15,
+              color: 'black',
+              fontSize: 17,
+              color: 'black',
+              fontFamily: 'Poppins-Regular',
             }}>
-            <TouchableOpacity
-              onPress={() => {
-                setShowMoreOptions(false);
-                navigation.navigate('CreateProductScreen', {
-                  userLoggedIn,
-                  metaData,
-                  item: currectProduct,
-                });
-              }}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 17,
-                  color: 'black',
-                  fontFamily: 'Poppins-Regular',
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#D5DBDB',
-                  paddingBottom: 5,
+            More Options
+          </Text>
+          <TouchableWithoutFeedback onPress={() => showHide(false)}>
+            <AntDesign name="close" size={20} color={'black'} />
+          </TouchableWithoutFeedback>
+        </View>
+        <View
+          style={{
+            marginTop: 15,
+          }}>
+          {list.map((item, _i) => {
+            return (
+              <TouchableOpacity
+                key={_i}
+                style={{marginBottom: 15}}
+                onPress={() => {
+                  onPress(item);
                 }}>
-                Update
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setShowMoreOptions(false);
-                _deleteProduct(currectProduct);
-              }}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 17,
-                  marginTop: 10,
-                  color: 'black',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                Delete
-              </Text>
-            </TouchableOpacity>
-          </View> */}
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 17,
+                    color: 'black',
+                    fontFamily: 'Poppins-Regular',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#D5DBDB',
+                    paddingBottom: 5,
+                  }}>
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
     </View>
   );
 }

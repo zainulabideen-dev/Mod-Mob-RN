@@ -8,7 +8,6 @@ import {
 import React, {useState} from 'react';
 import HeaderComp from '../../components/HeaderComp';
 import {
-  APP_NAME,
   CUSTOMER_NAV,
   SELLER_NAV,
   createNewShopText,
@@ -29,7 +28,7 @@ export default function UserNavHomeScreen({navigation, route}) {
   const {title} = route.params;
   const [showLoader, setShowLoader] = useState(false);
 
-  //console.log(userLoggedIn);
+  //console.log(title);
 
   async function _getLocationPermission() {
     let granted = await _askLocationPermission();
@@ -56,20 +55,23 @@ export default function UserNavHomeScreen({navigation, route}) {
         }}>
         <AppLoaderComp visible={showLoader} />
         <HeaderComp title={title} navigation={navigation} backPress={true} />
-        <Text
-          style={{
-            marginLeft: 10,
-            fontSize: 19,
-            color: 'black',
-            fontWeight: '500',
-            fontFamily: 'Poppins-Regular',
-            includeFontPadding: false,
-            textAlign: 'right',
-            marginTop: 10,
-            paddingRight: 25,
-          }}>
-          {title === 'Customer' ? `Customer Id: ${userLoggedIn?.user?.id}` : ''}
-        </Text>
+        {title === 'Customer' ? (
+          <Text
+            style={{
+              marginLeft: 10,
+              fontSize: 19,
+              color: 'black',
+              fontWeight: '500',
+              fontFamily: 'Poppins-Regular',
+              includeFontPadding: false,
+              textAlign: 'right',
+              marginTop: 10,
+              paddingRight: 25,
+            }}>
+            {`Customer Id: ${userLoggedIn?.user?.id}`}
+          </Text>
+        ) : null}
+
         <View style={{marginTop: 10}}>
           <FlatList
             data={navList}
@@ -165,7 +167,7 @@ export default function UserNavHomeScreen({navigation, route}) {
     return <NavigationComp navList={CUSTOMER_NAV} />;
   }
 
-  if (title === APP_NAME) {
+  if (title === 'ShopKeeper') {
     if (userLoggedIn.shop !== null && userLoggedIn?.shop?.active === '1') {
       return <NavigationComp navList={SELLER_NAV} />;
     }
